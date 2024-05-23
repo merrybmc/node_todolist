@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const taskApi = require('./task.api');
+const taskApi = require('../entitys/tasks/task.api');
 
 router.use('/tasks', taskApi);
 
