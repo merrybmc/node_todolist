@@ -45,7 +45,7 @@ taskService.putTask = async (req, res, next) => {
     // case 2 $set 생략 가능
     // const putTask = await Task.updateOne({ _id: id }, { isComplete });
 
-    // case 2 mongoose findByIdUpdate
+    // case 3 mongoose findByIdUpdate
     // parameter 1 = id 값 전달, 알아서 추적해냄
     // parameter 2 = 바꿀 객체 전달
     // parameter 3 = 옵션 객체 {new: true} = 변경사항이 반영된 값 전달 여부
