@@ -34,4 +34,21 @@ taskService.getTask = async (req, res, next) => {
   next();
 };
 
+taskService.putTask = async (req, res, next) => {
+  try {
+    if (req.statusCode === 400) return next();
+
+    const { id } = req.params;
+    const { isComplete } = req.body;
+    const putTask = await Task.updateOne({ _id: id }, { $set: { isComplete } });
+
+    req.statusCode = 200;
+    req.data = putTask;
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
+  next();
+};
+
 module.exports = taskService;
