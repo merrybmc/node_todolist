@@ -43,4 +43,21 @@ taskController.putTask = async (req, res, next) => {
   next();
 };
 
+taskController.deleteTask = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const getTask = await Task.findOne({ _id: id });
+
+    if (!getTask) {
+      req.statusCode = 400;
+      req.error = '존재하지 않는 task입니다.';
+    }
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
+  next();
+};
+
 module.exports = taskController;

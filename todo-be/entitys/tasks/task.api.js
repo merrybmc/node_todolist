@@ -10,8 +10,6 @@ router.post('/', taskController.createTask, taskService.createTask, intercepter)
 
 router.put('/:id', taskController.putTask, taskService.putTask, intercepter);
 
-router.delete('/:id', (req, res) => {
-  res.send('delete task');
-});
+router.delete('/:id', taskController.deleteTask, taskService.deleteTask, intercepter);
 
 module.exports = router;

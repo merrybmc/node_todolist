@@ -21,8 +21,6 @@ taskService.createTask = async (req, res, next) => {
 
 taskService.getTask = async (req, res, next) => {
   try {
-    if (req.statusCode === 400) return next();
-
     const taskList = await Task.find({});
 
     req.statusCode = 200;
@@ -44,6 +42,23 @@ taskService.putTask = async (req, res, next) => {
 
     req.statusCode = 200;
     req.data = putTask;
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
+  next();
+};
+
+taskService.deleteTask = async (req, res, next) => {
+  try {
+    if (req.statusCode === 400) return next();
+
+    const { id } = req.params;
+
+    const deleteTask = await Task.deleteOne({ _id: id });
+
+    req.statusCode = 200;
+    req.data = deleteTask;
   } catch (e) {
     req.statusCode = 400;
     req.error = e.message;
