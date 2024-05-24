@@ -8,9 +8,7 @@ taskController.createTask = async (req, res, next) => {
   if (!task) {
     req.statusCode = 400;
     req.error = 'task의 값이 비어있습니다.';
-    return next();
   }
-
   next();
 };
 
