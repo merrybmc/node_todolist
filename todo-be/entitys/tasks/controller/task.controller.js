@@ -11,9 +11,6 @@ taskController.createTask = async (req, res, next) => {
     return next();
   }
 
-  req.task = task;
-  req.isComplete = isComplete;
-
   next();
 };
 
