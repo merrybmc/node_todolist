@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import TodoItem from './TodoItem';
+import { TodoContext } from '../utils/todoContext';
 
-const TodoBoard = ({ todoList }) => {
+const TodoBoard = () => {
+  const { todoList } = useContext(TodoContext);
+  console.log(todoList);
   return (
     <div>
       <h2>Todo List</h2>
