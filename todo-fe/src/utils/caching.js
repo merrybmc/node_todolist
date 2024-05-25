@@ -11,7 +11,12 @@ export const setCachedData = (cachedData, setState) => {
 };
 
 export const validSetCacheData = (resData, cachedData, key, setState) => {
-  if (JSON.stringify(resData) !== JSON.stringify(cachedData)) {
+  if (cachedData) {
+    if (JSON.stringify(resData) !== JSON.stringify(cachedData)) {
+      localStorage.setItem(key, JSON.stringify(resData));
+      setState(resData);
+    }
+  } else {
     localStorage.setItem(key, JSON.stringify(resData));
     setState(resData);
   }

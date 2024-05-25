@@ -1,6 +1,5 @@
 import React, { useContext } from 'react';
 import { Col, Row } from 'react-bootstrap';
-import api from '../utils/api';
 import { deleteAsyncApi, putAsyncApi } from '../utils/apiCRUD';
 import { handleGetApiResponse } from '../utils/handleApiResponse';
 import { TodoContext } from '../utils/todoContext';

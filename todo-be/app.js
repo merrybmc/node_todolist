@@ -10,11 +10,7 @@ const port = process.env.PORT || 5000;
 const mongoURI = process.env.REACT_APP_BACKEND_PROD;
 
 const corsOptions = {
-  origin: [
-    'https://d2iujalm5eztfq.cloudfront.net/',
-    'http://localhost:3000',
-    'http://nunatodo.s3-website-us-east-1.amazonaws.com/',
-  ],
+  origin: ['https://hilarious-dusk-8b2ae8.netlify.app/', 'http://localhost:3000'],
 };
 
 app.use(bodyParser.json());
