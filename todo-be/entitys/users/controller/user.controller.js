@@ -21,36 +21,23 @@ userController.createUser = async (req, res, next) => {
   next();
 };
 
-userController.loginWithEmail = async (req, res) => {
+userController.loginWithEmail = async (req, res, next) => {
   try {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-    console.log('1');
-    console.log(user);
-    if (user) {
-      const isMath = bcrypt.compareSync(password, user.password);
-      console.log('a');
-      console.log(isMath);
-      if (isMath) {
-        const token = user.generateToken();
-        console.log(token);
-        console.log('b');
-        const options = {
-          httpOnly: true, // js로 cookie의 값을 읽어들일 수 없음
-          sameSite: 'none', // 서버와 클라이언트가 동일한 도메인이 아니더라도 가능하게
-          secure: true, // sameSite를 none으로 설정했을 때 설정
-        };
-        res.status(200).cookie('token', token, options).json({ status: 'success' }); // 일반 쿠키가 아닌 HTTP-ONLY Cookie 설정
-      } else {
-        res.status(400).json({ status: 'fail', message: 'invalid password' });
-      }
-    } else {
-      res.status(400).json({ status: 'fail', message: 'user not found' });
-    }
+
+    if (!user) throw new Error('가입이 되어있지 않은 이메일입니다.');
+
+    const isMath = bcrypt.compareSync(password, user.password);
+    if (!isMath) throw new Error('비밀번호가 일치하지 않습니다.');
+
+    req.user = user;
   } catch (e) {
-    res.status(400).json({ error: e.message });
+    req.statusCode = 400;
+    req.error = e.message;
   }
+  next();
 };
 
 userController.validToken = async (req, res) => {

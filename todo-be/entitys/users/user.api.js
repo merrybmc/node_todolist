@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/', authController.validEmail, userService.createUser, intercepter);
 
-router.post('/login', userController.loginWithEmail);
+router.post('/login', userController.loginWithEmail, userService.loginWithEmail, intercepter);
 
 router.get('/valid', userController.validToken);
 
