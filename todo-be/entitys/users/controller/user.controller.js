@@ -28,4 +28,21 @@ userController.createUser = async (req, res) => {
   }
 };
 
+userController.loginWithEmail = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (user) {
+      const isMath = bcrypt.compareSync(password, user.password);
+      if (isMath) {
+        const token = user.generateToken();
+
+        return res.status(200).json({ status: 'success', user, token });
+      }
+    }
+  } catch (e) {}
+};
+
 module.exports = userController;
