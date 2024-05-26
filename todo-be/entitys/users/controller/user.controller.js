@@ -79,16 +79,12 @@ userController.logOut = async (req, res) => {
   res.status(200).json({ status: 'success', message: '완료' });
 };
 
-userController.authenticate = () => {
+userController.getUser = async (req, res) => {
   try {
-    const token = req.cookies['token'];
-    if (!token) {
-      throw new Error('invalid token');
-    }
-    jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
-      if (error) throw new Error('invalid token');
-    });
-  } catch (e) {}
+    const user = User.findById(id);
+  } catch (e) {
+    res.status(400).json({ status: 'fail', message: error.message });
+  }
 };
 
 module.exports = userController;
