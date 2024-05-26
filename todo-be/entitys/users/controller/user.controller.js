@@ -1,8 +1,10 @@
 const bcrypt = require('bcrypt');
 const User = require('../User.Schema');
+const authController = require('../../auth/auth.repository');
 
 const userController = {};
 
+// 회원가입
 userController.createUser = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();
@@ -19,6 +21,7 @@ userController.createUser = async (req, res, next) => {
   next();
 };
 
+// 로그인
 userController.loginWithEmail = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -38,6 +41,7 @@ userController.loginWithEmail = async (req, res, next) => {
   next();
 };
 
+// 유저 정보 조회
 userController.getUser = async (req, res, next) => {
   try {
     const { validTokenId } = req;
@@ -54,13 +58,15 @@ userController.getUser = async (req, res, next) => {
   next();
 };
 
-userController.logOut = async (req, res) => {
-  res.clearCookie('token', {
-    httpOnly: true,
-    sameSite: 'none',
-    secure: true,
-  });
-  res.status(200).json({ status: 'success', message: '완료' });
+// 로그아웃
+userController.logout = async (req, res, next) => {
+  try {
+    await authController.logout(req, res, next);
+    next();
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
 };
 
 module.exports = userController;

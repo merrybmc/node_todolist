@@ -3,6 +3,7 @@ const Task = require('../Task.schema');
 
 const taskService = {};
 
+// 데이터 쓰기 Create
 taskService.createTask = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();
@@ -15,11 +16,13 @@ taskService.createTask = async (req, res, next) => {
     req.statusCode = 200;
     req.data = newTask;
   } catch (e) {
+    res.statusCode = 400;
     req.error = e.message;
   }
   next();
 };
 
+// 데이터 읽기 Read
 taskService.getTask = async (req, res, next) => {
   try {
     const taskList = await Task.find({});
@@ -33,6 +36,7 @@ taskService.getTask = async (req, res, next) => {
   next();
 };
 
+// 데이터 수정 Update
 taskService.putTask = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();
@@ -61,6 +65,7 @@ taskService.putTask = async (req, res, next) => {
   next();
 };
 
+// 데이터 삭제 Delete
 taskService.deleteTask = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();

@@ -5,19 +5,6 @@ require('dotenv').config();
 
 const authController = {};
 
-authController.authenticate = (req, res, next) => {
-  try {
-    const token = req.cookies['token'];
-    if (!token) {
-      throw new Error('invalid token');
-    }
-    jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
-      if (error) throw new Error('invalid token');
-      next();
-    });
-  } catch (e) {}
-};
-
 authController.validEmail = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -33,7 +20,7 @@ authController.validEmail = async (req, res, next) => {
   next();
 };
 
-authController.validToken = async (req, res, next) => {
+authController.authenticate = async (req, res, next) => {
   try {
     // const authHeader = req.get('Authrization');
 
@@ -48,11 +35,25 @@ authController.validToken = async (req, res, next) => {
       }
     });
     req.validTokenId = result;
+  } catch (e) {}
+  next();
+};
+
+authController.logout = async (req, res, next) => {
+  try {
+    const token = req.cookies['token'];
+
+    if (!token) throw new Error('로그인 상태가 아닙니다.');
+
+    res.clearCookie('token', {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
   } catch (e) {
     req.statusCode = 400;
     req.error = e.message;
   }
-  next();
 };
 
 module.exports = authController;

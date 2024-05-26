@@ -2,6 +2,7 @@ const userService = {};
 const bcrypt = require('bcrypt');
 const User = require('../User.Schema');
 
+// 회원가입
 userService.createUser = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();
@@ -24,8 +25,7 @@ userService.createUser = async (req, res, next) => {
   next();
 };
 
-module.exports = userService;
-
+// 로그인
 userService.loginWithEmail = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();
@@ -50,6 +50,7 @@ userService.loginWithEmail = async (req, res, next) => {
   next();
 };
 
+// 유저 정보 조회
 userService.getUser = async (req, res, next) => {
   try {
     const { user } = req;
@@ -62,3 +63,15 @@ userService.getUser = async (req, res, next) => {
   }
   next();
 };
+
+// 로그아웃
+userService.logout = async (req, res, next) => {
+  if (req.statusCode === 400) return next();
+
+  req.statusCode = 200;
+  requestAnimationFrame.data = '로그아웃 완료';
+
+  next();
+};
+
+module.exports = userService;
