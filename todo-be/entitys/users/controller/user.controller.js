@@ -79,4 +79,16 @@ userController.logOut = async (req, res) => {
   res.status(200).json({ status: 'success', message: '완료' });
 };
 
+userController.authenticate = () => {
+  try {
+    const token = req.cookies['token'];
+    if (!token) {
+      throw new Error('invalid token');
+    }
+    jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
+      if (error) throw new Error('invalid token');
+    });
+  } catch (e) {}
+};
+
 module.exports = userController;

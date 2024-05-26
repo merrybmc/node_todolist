@@ -6,5 +6,5 @@ router.post('/', userController.createUser);
 router.post('/login', userController.loginWithEmail);
 router.get('/valid', userController.validToken);
 router.get('/logout', userController.logOut);
-
+router.get('/me', userController.authenticate);
 module.exports = router;
