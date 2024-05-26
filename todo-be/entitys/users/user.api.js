@@ -4,5 +4,6 @@ const router = express.Router();
 
 router.post('/', userController.createUser);
 router.post('/login', userController.loginWithEmail);
+router.get('/valid', userController.validToken);
 
 module.exports = router;

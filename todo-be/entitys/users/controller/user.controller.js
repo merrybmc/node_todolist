@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../User.Schema');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const userController = {};
 
@@ -43,6 +45,17 @@ userController.loginWithEmail = async (req, res) => {
       }
     }
   } catch (e) {}
+};
+
+userController.validToken = async (req, res) => {
+  const authHeader = req.get('Authrization');
+  const token = req.cookies['token'];
+  const result = jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
+    if (error) {
+      throw new Error('invalid token');
+    }
+  });
+  res.status(200).json({ token: authHeader, a: req.cookies['token'], b: result });
 };
 
 module.exports = userController;
