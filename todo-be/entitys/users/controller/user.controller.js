@@ -70,4 +70,13 @@ userController.validToken = async (req, res) => {
   res.status(200).json({ token: authHeader, a: req.cookies['token'], b: result });
 };
 
+userController.logOut = async (req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
+  res.status(200).json({ status: 'success', message: '완료' });
+};
+
 module.exports = userController;
