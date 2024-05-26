@@ -5,26 +5,20 @@ const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 const userController = {};
 
-userController.createUser = async (req, res) => {
+userController.createUser = async (req, res, next) => {
   try {
-    const { email, name, password } = req.body;
-    const user = await User.findOne({ email });
+    if (req.statusCode === 400) return next();
 
-    if (user) {
-      throw new Error('이미 가입이 된 유저입니다.');
+    const { name } = req.body;
+
+    if (!name) {
+      throw new Error('이름이 비어있습니다.');
     }
-
-    const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(password, salt);
-
-    const newUser = new User({ email, name, password: hash });
-
-    await newUser.save();
-
-    res.status(200).json({ status: 'success', data: newUser });
   } catch (e) {
-    res.status(400).json({ status: 'success', error: e.message });
+    req.statusCode = 400;
+    req.error = e.message;
   }
+  next();
 };
 
 userController.loginWithEmail = async (req, res) => {
