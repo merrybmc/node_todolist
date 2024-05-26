@@ -9,7 +9,13 @@ router.post('/', authController.validEmail, userService.createUser, intercepter)
 
 router.post('/login', userController.loginWithEmail, userService.loginWithEmail, intercepter);
 
-router.get('/valid', authController.validToken);
+router.get(
+  '/valid',
+  authController.validToken,
+  userController.getUser,
+  userService.getUser,
+  intercepter
+);
 
 router.get('/logout', userController.logOut);
 

@@ -38,10 +38,15 @@ authController.validToken = async (req, res, next) => {
     // const authHeader = req.get('Authrization');
 
     const token = req.cookies['token'];
-    const result = jwt.verify(token, JWT_SECRET_KEY, (error) => {
-      if (error) throw new Error('토큰이 유효하지 않습니다.');
-    });
+    let result = '';
 
+    jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
+      if (error) {
+        throw new Error('토큰이 유효하지 않습니다.');
+      } else {
+        result = payload._id;
+      }
+    });
     req.validTokenId = result;
   } catch (e) {
     req.statusCode = 400;

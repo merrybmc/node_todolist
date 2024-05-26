@@ -38,6 +38,22 @@ userController.loginWithEmail = async (req, res, next) => {
   next();
 };
 
+userController.getUser = async (req, res, next) => {
+  try {
+    const { validTokenId } = req;
+
+    const user = await User.findById(validTokenId);
+
+    if (!user) throw new Error('존재하지 않는 회원입니다.');
+
+    req.user = user;
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
+  next();
+};
+
 userController.logOut = async (req, res) => {
   res.clearCookie('token', {
     httpOnly: true,
@@ -45,14 +61,6 @@ userController.logOut = async (req, res) => {
     secure: true,
   });
   res.status(200).json({ status: 'success', message: '완료' });
-};
-
-userController.getUser = async (req, res) => {
-  try {
-    const user = User.findById(id);
-  } catch (e) {
-    res.status(400).json({ status: 'fail', message: error.message });
-  }
 };
 
 module.exports = userController;

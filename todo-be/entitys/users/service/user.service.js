@@ -49,3 +49,16 @@ userService.loginWithEmail = async (req, res, next) => {
   }
   next();
 };
+
+userService.getUser = async (req, res, next) => {
+  try {
+    const { user } = req;
+
+    req.statusCode = 200;
+    req.data = user;
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
+  next();
+};
