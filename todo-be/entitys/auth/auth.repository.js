@@ -1,6 +1,8 @@
 const User = require('../users/User.Schema');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+const SECRET_CSRF_TOKEN = process.env.SECRET_CSRF_TOKEN;
 require('dotenv').config();
 
 const authController = {};
@@ -54,6 +56,20 @@ authController.logout = async (req, res, next) => {
     req.statusCode = 400;
     req.error = e.message;
   }
+};
+
+authController.createCsrfToken = (req, res, next) => {
+  try {
+    const salt = bcrypt.genSaltSync(10);
+    const hash = bcrypt.hashSync(SECRET_CSRF_TOKEN, salt);
+
+    req.statusCode = 200;
+    req.data = hash;
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
+  next();
 };
 
 module.exports = authController;

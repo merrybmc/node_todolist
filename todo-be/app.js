@@ -6,7 +6,7 @@ require('dotenv').config();
 const mongoURI = process.env.REACT_APP_BACKEND_PROD;
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-
+const csrfCheck = require('./common/guard/csrfcheck');
 const app = express();
 
 const port = process.env.PORT || 5000;
@@ -20,6 +20,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors(corsOption));
 app.use('/api', indexRouter);
+app.use(csrfCheck);
 
 console.log(mongoURI);
 mongoose

@@ -23,4 +23,7 @@ router.get(
   intercepter
 );
 
+// CSRF 토큰 획득
+router.get('/getCsrfToken', authController.createCsrfToken, intercepter);
+
 module.exports = router;
