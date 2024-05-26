@@ -32,6 +32,16 @@ userSchema.methods.generateToken = function () {
   const token = jwt.sign({ _id: this._id }, JWT_SECRET_KEY);
   return token;
 };
+
+userSchema.methods.setToken = function (res, token) {
+  const options = {
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  };
+  return res.cookie('token', token, options); // 일반 쿠키가 아닌 HTTP-ONLY Cookie 설정
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
