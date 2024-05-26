@@ -7,6 +7,7 @@ require('dotenv').config();
 
 const authController = {};
 
+// 이메일 유효성 검사
 authController.validEmail = async (req, res, next) => {
   try {
     const { email } = req.body;
@@ -22,6 +23,7 @@ authController.validEmail = async (req, res, next) => {
   next();
 };
 
+// 토큰 검증
 authController.authenticate = async (req, res, next) => {
   try {
     // const authHeader = req.get('Authrization');
@@ -41,6 +43,7 @@ authController.authenticate = async (req, res, next) => {
   next();
 };
 
+// 로그아웃 (httpOnly Cookie 삭제)
 authController.logout = async (req, res, next) => {
   try {
     const token = req.cookies['token'];
@@ -58,18 +61,23 @@ authController.logout = async (req, res, next) => {
   }
 };
 
+// CSRF 토큰 생성
 authController.createCsrfToken = (req, res, next) => {
   try {
     const salt = bcrypt.genSaltSync(10);
     const hash = bcrypt.hashSync(SECRET_CSRF_TOKEN, salt);
 
-    req.statusCode = 200;
-    req.data = hash;
+    const options = {
+      httpOnly: true, // js로 cookie의 값을 읽어들일 수 없음
+      sameSite: 'none', // 서버와 클라이언트가 동일한 도메인이 아니더라도 가능하게
+      secure: true, // sameSite를 none으로 설정했을 때 설정
+    };
+
+    res.cookie('csrfToken', hash, options);
+    res.status(200).json({ status: 'success' });
   } catch (e) {
-    req.statusCode = 400;
-    req.error = e.message;
+    res.status(400).json({ status: 'fail', error: e });
   }
-  next();
 };
 
 module.exports = authController;

@@ -19,8 +19,9 @@ const corsOption = {
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(cors(corsOption));
-app.use('/api', indexRouter);
+
 app.use(csrfCheck);
+app.use('/api', indexRouter);
 
 console.log(mongoURI);
 mongoose

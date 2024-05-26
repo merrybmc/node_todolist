@@ -24,6 +24,6 @@ router.get(
 );
 
 // CSRF 토큰 획득
-router.get('/getCsrfToken', authController.createCsrfToken, intercepter);
+router.get('/getCsrfToken', authController.createCsrfToken);
 
 module.exports = router;
