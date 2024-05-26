@@ -12,15 +12,15 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const corsOption = {
-  credentials: true,
+  origin: 'http://localhost:3000',
+  credentials: true, // header의 정보가 안전한 것이라고 브라우저가 판단할 수 있게
 };
 
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors(corsOption));
 app.use('/api', indexRouter);
 
-// const mongoURI = `mongodb://localhost:27017/todo-demo`;
 console.log(mongoURI);
 mongoose
   .connect(mongoURI)

@@ -19,10 +19,7 @@ userController.createUser = async (req, res) => {
 
     const newUser = new User({ email, name, password: hash });
 
-    newUser.save();
-
-    res.statusCode = 200;
-    res.data = newUser;
+    await newUser.save();
 
     res.status(200).json({ status: 'success', data: newUser });
   } catch (e) {
@@ -35,16 +32,31 @@ userController.loginWithEmail = async (req, res) => {
     const { email, password } = req.body;
 
     const user = await User.findOne({ email });
-
+    console.log('1');
+    console.log(user);
     if (user) {
       const isMath = bcrypt.compareSync(password, user.password);
+      console.log('a');
+      console.log(isMath);
       if (isMath) {
         const token = user.generateToken();
-        user.setToken(res, token);
-        return res.status(200).json({ status: 'success', user, token });
+        console.log(token);
+        console.log('b');
+        const options = {
+          httpOnly: true, // js로 cookie의 값을 읽어들일 수 없음
+          sameSite: 'none', // 서버와 클라이언트가 동일한 도메인이 아니더라도 가능하게
+          secure: true, // sameSite를 none으로 설정했을 때 설정
+        };
+        res.status(200).cookie('token', token, options).json({ status: 'success' }); // 일반 쿠키가 아닌 HTTP-ONLY Cookie 설정
+      } else {
+        res.status(400).json({ status: 'fail', message: 'invalid password' });
       }
+    } else {
+      res.status(400).json({ status: 'fail', message: 'user not found' });
     }
-  } catch (e) {}
+  } catch (e) {
+    res.status(400).json({ error: e.message });
+  }
 };
 
 userController.validToken = async (req, res) => {
