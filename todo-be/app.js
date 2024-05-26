@@ -2,21 +2,19 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const indexRouter = require('./routes/index');
-const cors = require('cors');
 require('dotenv').config();
-
 const app = express();
-const port = process.env.PORT || 5000;
 const mongoURI = process.env.REACT_APP_BACKEND_PROD;
+const cors = require('cors');
 
-const corsOptions = {
-  origin: ['https://hilarious-dusk-8b2ae8.netlify.app/', 'http://localhost:3000'],
-};
+const port = process.env.PORT || 5000;
 
 app.use(bodyParser.json());
+app.use(cors());
 app.use('/api', indexRouter);
-app.use(cors(corsOptions));
 
+// const mongoURI = `mongodb://localhost:27017/todo-demo`;
+console.log(mongoURI);
 mongoose
   .connect(mongoURI)
   .then(() => {

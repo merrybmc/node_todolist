@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Task = require('../Task.schema');
 
 const taskService = {};
@@ -6,7 +7,7 @@ taskService.createTask = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();
 
-    const { task, isComplete } = req;
+    const { task, isComplete } = req.body;
 
     const newTask = new Task({ task, isComplete });
     await newTask.save();
@@ -66,6 +67,8 @@ taskService.deleteTask = async (req, res, next) => {
 
     const { id } = req.params;
 
+    console.log(!mongoose.Types.ObjectId.isValid(id));
+
     // const deleteTask = await Task.deleteOne({ _id: id });
     // findByIdAndDelete는 id값만 전달, 옵션 객체는 일반적으로 많이 쓰이지 않음
     const deleteTask = await Task.findByIdAndDelete(id);
@@ -74,7 +77,6 @@ taskService.deleteTask = async (req, res, next) => {
     req.data = deleteTask;
   } catch (e) {
     req.statusCode = 400;
-    ㅏ;
     req.error = e.message;
   }
   next();

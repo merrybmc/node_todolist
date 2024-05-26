@@ -4,11 +4,11 @@ const taskController = {};
 
 taskController.createTask = async (req, res, next) => {
   try {
-  const { task, isComplete } = req.body;
+    const { task } = req.body;
 
-  if (!task) {
-    req.statusCode = 400;
-    req.error = 'task의 값이 비어있습니다.';
+    if (!task) {
+      req.statusCode = 400;
+      req.error = 'task의 값이 비어있습니다.';
     }
   } catch (e) {
     req.statusCode = 400;
