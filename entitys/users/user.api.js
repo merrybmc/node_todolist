@@ -6,13 +6,19 @@ const userService = require('./service/user.service');
 const router = express.Router();
 
 // 회원가입
-router.post('/', authController.validEmail, userService.createUser, intercepter);
+router.post(
+  '/',
+  authController.validEmail,
+  userController.createUser,
+  userService.createUser,
+  intercepter
+);
 
 // 로그인
 router.post('/login', userController.loginWithEmail, userService.loginWithEmail, intercepter);
 
 // 로그아웃
-router.get('/logout', userController.logout, userService.logout, intercepter);
+router.get('/logout', authController.logout);
 
 // 유저 정보 조회
 router.get(

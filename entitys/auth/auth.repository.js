@@ -1,6 +1,6 @@
 const User = require('../users/User.Schema');
 const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 const SECRET_CSRF_TOKEN = process.env.SECRET_CSRF_TOKEN;
 require('dotenv').config();
@@ -10,7 +10,7 @@ const authController = {};
 // 이메일 유효성 검사
 authController.validEmail = async (req, res, next) => {
   try {
-    const { email } = req.body;
+    const { name, email, password } = req.body;
     const user = await User.findOne({ email });
 
     if (user) {
@@ -31,6 +31,8 @@ authController.authenticate = async (req, res, next) => {
     const token = req.cookies['token'];
     let result = '';
 
+    if (!token) throw new Error('토큰이 유효하지 않습니다.');
+
     jwt.verify(token, JWT_SECRET_KEY, (error, payload) => {
       if (error) {
         throw new Error('토큰이 유효하지 않습니다.');
@@ -39,7 +41,11 @@ authController.authenticate = async (req, res, next) => {
       }
     });
     req.validTokenId = result;
-  } catch (e) {}
+    req.statusCode = 200;
+  } catch (e) {
+    req.statusCode = 400;
+    req.error = e.message;
+  }
   next();
 };
 
@@ -55,9 +61,10 @@ authController.logout = async (req, res, next) => {
       sameSite: 'none',
       secure: true,
     });
+
+    res.status(200).json({ status: 'success' });
   } catch (e) {
-    req.statusCode = 400;
-    req.error = e.message;
+    res.status(400).json({ status: 'fail', error: e.message });
   }
 };
 

@@ -1,4 +1,4 @@
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../User.Schema');
 const authController = require('../../auth/auth.repository');
 
@@ -9,7 +9,7 @@ userController.createUser = async (req, res, next) => {
   try {
     if (req.statusCode === 400) return next();
 
-    const { name } = req.body;
+    const { name, email, password } = req.body;
 
     if (!name) {
       throw new Error('이름이 비어있습니다.');

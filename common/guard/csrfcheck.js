@@ -1,5 +1,5 @@
 const temp = 0;
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../../entitys/users/User.Schema');
 const SECRET_CSRF_TOKEN = process.env.SECRET_CSRF_TOKEN;
 

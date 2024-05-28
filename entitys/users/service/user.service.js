@@ -1,5 +1,5 @@
 const userService = {};
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const User = require('../User.Schema');
 
 // 회원가입
@@ -14,6 +14,7 @@ userService.createUser = async (req, res, next) => {
 
     const newUser = new User({ email, name, password: hash });
 
+    await newUser.save();
     newUser.save();
 
     req.statusCode = 200;

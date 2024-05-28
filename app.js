@@ -12,7 +12,14 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const corsOption = {
-  origin: 'http://localhost:3000',
+  origin: [
+    'http://localhost:3000',
+    'https://localhost:3000',
+    'http://nunatodo.s3-website-us-east-1.amazonaws.com',
+    'https://nunatodo.s3-website-us-east-1.amazonaws.com',
+    'http://d3dlvbxpgesgac.cloudfront.net',
+    'https://d3dlvbxpgesgac.cloudfront.net',
+  ],
   credentials: true, // header의 정보가 안전한 것이라고 브라우저가 판단할 수 있게
 };
 
