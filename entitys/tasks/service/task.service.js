@@ -9,8 +9,8 @@ taskService.createTask = async (req, res, next) => {
     if (req.statusCode === 400) return next();
 
     const { task, isComplete } = req.body;
-
-    const newTask = new Task({ task, isComplete });
+    const { validTokenId } = req;
+    const newTask = new Task({ task, isComplete, author: validTokenId });
     await newTask.save();
 
     req.statusCode = 200;
@@ -25,7 +25,8 @@ taskService.createTask = async (req, res, next) => {
 // 데이터 읽기 Read
 taskService.getTask = async (req, res, next) => {
   try {
-    const taskList = await Task.find({});
+    // 다른 collection에 있는 참조된 doc들을 가져온다.
+    const taskList = await Task.find({}).populate('author');
 
     req.statusCode = 200;
     req.data = taskList;
